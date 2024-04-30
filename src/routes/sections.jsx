@@ -17,7 +17,7 @@ export default function Router() {
       path: 'login',
       element: <LoginPage />,
     },
-    { 
+    {
       element: (
         <DashboardLayout>
           <Suspense>
@@ -34,7 +34,7 @@ export default function Router() {
     },
     {
       path: 'actions',
-      element: <PlanactionsPage />,
+      element: <actionsPage />,
     },
     {
       path: '404',
@@ -54,15 +54,17 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 
 import DashboardLayout from 'src/layouts/dashboard';
-   
+import {ROLE} from "src/utils/data";
+import ProtectedRoute from "src/routes/ProtectedRoute";
+import DirectionSupportPage from 'src/pages/DirectionSupport';
+
 const IndexPage = lazy(() => import('src/pages/app'));
-const BlogPage = lazy(() => import('src/pages/blog'));
 const UserPage = lazy(() => import('src/pages/user'));
 const LoginPage = lazy(() => import('src/pages/login'));
 const ProductsPage = lazy(() => import('src/pages/products'));
 const Page404 = lazy(() => import('src/pages/page-not-found'));
 const PlanactionsPage = lazy(() => import('src/pages/Planactions'));
-
+const PrestatairePage = lazy (()=> import('src/pages/Prestataire'))
 
 const AppRoutes = () => {
   return (
@@ -72,22 +74,29 @@ const AppRoutes = () => {
         <Route
           path="/dashboard/*"
           element={
-            <DashboardLayout>   
+            <DashboardLayout>
               {/* Subroutes for the dashboard */}
               <Routes>
                 <Route path="/" element={<IndexPage />} /> {/* Redirect to UserPage by default */}
-                <Route path="/user" element={<UserPage />} />
+                <Route path="/user" element={
+                    <ProtectedRoute roles={[ROLE.Admin]}>
+                        <UserPage />
+                    </ProtectedRoute>
+                } />
                 <Route path="/products" element={<ProductsPage />} />
-                <Route path="/blog" element={<BlogPage />} />
                 <Route path="/actions" element={<PlanactionsPage />} />
+                <Route path="/pres" element={<PrestatairePage />} />
+                <Route path="/Support" element={<DirectionSupportPage />} />
+
                 {/* Add more subroutes as needed */}
               </Routes>
             </DashboardLayout>
           }
         />
-        {/* Redirect all other paths to login */}
+        
+          <Route path="/404" element={<Page404 />} />
+          {/* Redirect all other paths to login */}
         <Route path="*" element={<Navigate to="/login" />} />
-        {/* Wrong path */}
       </Routes>
     </Suspense>
   );

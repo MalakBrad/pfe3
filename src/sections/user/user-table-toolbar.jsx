@@ -27,13 +27,15 @@ export default function UserTableToolbar({ numSelected, filterName, onFilterName
     >
       {numSelected > 0 ? (
         <Typography component="div" variant="subtitle1">
-          {numSelected} selected
+
+          {numSelected>1 ? `${numSelected} Selections`: `${numSelected} Selection`} 
+
         </Typography>
       ) : (
         <OutlinedInput
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search user..."
+          placeholder="Recherche"
           startAdornment={
             <InputAdornment position="start">
               <Iconify
@@ -46,13 +48,13 @@ export default function UserTableToolbar({ numSelected, filterName, onFilterName
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
+        <Tooltip title="">
           <IconButton>
             <Iconify icon="eva:trash-2-fill" />
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
+        <Tooltip title="Filtrer la liste">
           <IconButton>
             <Iconify icon="ic:round-filter-list" />
           </IconButton>

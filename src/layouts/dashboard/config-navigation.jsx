@@ -17,6 +17,17 @@ const navConfig = [
     path: '/dashboard/user',
     icon: icon('ic_user'),
   },
+ 
+  {
+    title: "Direction Support",
+    path: '/dashboard/Support', 
+  },
+  {
+    title: 'Filières',
+    path: '/dashboard/Filiere',
+    
+    
+  },
   {
     title: "Plan d'action",
     path: '/dashboard/actions',
@@ -24,7 +35,7 @@ const navConfig = [
   },
   
   {
-    title: 'Prestataires Externes',
+    title: 'Prestataires ',
     path: '/dashboard/Pres',
     
   },
@@ -35,15 +46,11 @@ const navConfig = [
     icon: icon('ic_cart'),
   },
 {
-    title: 'Politique de la Qualité ',
+    title: 'Politique Qualité ',
     path: '/dashboard/politique',
+  },
   
-  }   
-/* {
-    title: 'blog',
-    path: '/dashboard/blog',
-    icon: icon('ic_blog'),
-  }, */
+  
 ];
 
 export default navConfig;

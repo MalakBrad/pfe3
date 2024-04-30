@@ -8,7 +8,7 @@ export default function AppPage() {
   return (
     <>
       <Helmet>
-        <title> Tableau De Bord | Minimal UI </title>
+        <title> Tableau De Bord | Suivi SMQ </title>
       </Helmet>
       
       <AppView />

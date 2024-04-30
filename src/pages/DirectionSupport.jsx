@@ -1,16 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { LoginView } from 'src/sections/login';
+import { SupportView } from 'src/sections/DirectionSupport/View';
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
+export default function DirectionSupportPage() {
   return (
     <>
       <Helmet>
-        <title> Se Connecter | Suivi SMQ </title>
+        <title> Support | Suivi SMQ  </title>
       </Helmet>
-      <LoginView />
+
+      <SupportView/>
     </>
   );
 }

@@ -8,9 +8,9 @@ export default function Planactions() {
   return (
     <>
       <Helmet>
-        <title> Plan des Actions | Minimal UI </title>
+        <title>Plan des Actions | Suivi SMQ</title>
       </Helmet>
-
+ 
       <Planactionsview />
     </>
   );

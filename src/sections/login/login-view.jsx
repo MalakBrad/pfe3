@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
@@ -10,95 +9,110 @@ import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
-
-import { useRouter } from 'src/routes/hooks';
-
-import { bgGradient } from 'src/theme/css';
-
 import Iconify from 'src/components/iconify';
 import { useNavigate } from 'react-router-dom';
+import {users} from "src/utils/data";
+import {toast} from "react-toastify";
 
-// ----------------------------------------------------------------------
+// Import user data
 
 export default function LoginView() {
-  const theme = useTheme();
-  const navigate = useNavigate();
+    const theme = useTheme();
+    const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
+    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [error, setError] = useState('');
 
-  const router = useRouter();
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-  const [showPassword, setShowPassword] = useState(false);
+    const handleClick = () => {
+        const { email, password } = formData;
 
-  const handleClick = () => {
-    console.log(router);
-    router.push('/dashboard');
-  };
+        // Check if the provided email and password match any user in the user array
+        const foundUser = users.find((user) => user.email === email && user.password === password);
+        if (foundUser) {
+            // If user found, remove password field and store user in localStorage
+            const { password, ...objUser } = foundUser;
+            localStorage.setItem('user', JSON.stringify(objUser));
 
-  const renderForm = (
-    <>
-      <Stack spacing={5}>
-        <TextField name="email" label="adresse e-mail" />
+            // Navigate to the dashboard
+            navigate('/dashboard');
+            toast.success('Connexion réussie !');
+        } else {
+            // If user not found, display an error message
+            setError('Adresse e-mail ou mot de passe invalide!');
+            toast.error('Échec de la connexion !');
+        }
+    };
 
-        <TextField
-          name="Mot de Passe"
-          label="Mot de Passe"
-          type={showPassword ? 'text' : 'Mot de Passe'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
-        <Link variant="subtitle2" underline="hover">
-        Mot de passe oublié ?
-        </Link>
-      </Stack>
+    const renderForm = (
+        <>
+            <Stack spacing={5}>
+                <TextField name="email" label="Adresse e-mail" value={formData.email} onChange={handleChange} />
 
-      <LoadingButton
-        fullWidth
-        size="large"
-        type="submit"
-        variant="contained"
-        color="inherit"
-        onClick={handleClick}
-      >
-        Se Connecter
-      </LoadingButton>
-    </>
-  );
+                <TextField
+                    name="password"
+                    label="Mot de Passe"
+                    type={showPassword ? 'text' : 'password'}
+                    value={formData.password}
+                    onChange={handleChange}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Stack>
 
-  return (
-    <Box
-      sx={{
-        ...bgGradient({
-          color: alpha(theme.palette.background.default, 0.9),
-          imgUrl: '/assets/background/overlay_4.jpg',
-        }),
-        height: 1,
-      }}
-    >
-      
-      <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-        <Card
-          sx={{
-            p: 5,
-            width: 1,
-            maxWidth: 420,
-          }}
+            <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
+                <Link variant="subtitle2" underline="hover">
+                    Mot de passe oublié ?
+                </Link>
+            </Stack>
+
+            {error && <Typography color="error">{error}</Typography>}
+
+            <LoadingButton
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                color="inherit"
+                onClick={handleClick}
+            >
+                Se Connecter
+            </LoadingButton>
+        </>
+    );
+
+    return (
+        <Box
+            sx={{
+                height: 1,
+            }}
         >
-         <Stack spacing={7}>
-          <Typography variant="h4"> Contribuons ensemble pour améliorer notre SMQ </Typography>
+            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+                <Card
+                    sx={{
+                        p: 5,
+                        width: 1,
+                        maxWidth: 420,
+                    }}
+                >
+                    <Stack spacing={7}>
+                        <Typography variant="h4"> Contribuons ensemble pour améliorer notre SMQ </Typography>
 
-          {renderForm}
-          </Stack>
-        </Card>
-      </Stack>
-    </Box>
-  );
+                        {renderForm}
+                    </Stack>
+                </Card>
+            </Stack>
+        </Box>
+    );
 }
